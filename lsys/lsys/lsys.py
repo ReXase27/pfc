@@ -1,4 +1,5 @@
 from __future__ import annotations
+import logging
 from colorama import Back
 import colorama
 
@@ -8,6 +9,7 @@ import shared
 
 def main() -> int:
     colorama.init(autoreset=True)
+    logging.basicConfig(level=logging.INFO)
 
     while True:
         if shared.logged_user is None:
@@ -17,17 +19,17 @@ def main() -> int:
             try:
                 exec_action(get_action(user_input))
             except ValueError as e:
-                print(e)
+                logging.error(e)
 
         else:
-            print(f"{Back.CYAN}[SYSTEM]:\tEnter 'help' or '?' for a list of commands\n")
+            print(f"{Back.CYAN}[SYSTEM]: Type 'help' or '?' for a list of commands\n")
             user_input = input(
                 f"[{shared.logged_user.username}] >>\t" # noqa
             )  
             try:
                 exec_user_action(get_user_action(user_input), shared.logged_user)
             except ValueError as e:
-                print(e)
+                logging.error(e)
 
 
 if __name__ == "__main__":
